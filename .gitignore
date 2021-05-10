@@ -1,0 +1,7 @@
+__pycache__
+lib/
+bin/
+pyvenv.cfg
+include/
+lib64
+test.rest
