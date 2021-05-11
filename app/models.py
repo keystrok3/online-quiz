@@ -21,7 +21,7 @@ class Questions(db.Model):
     option_d = db.Column(db.String(128), index=True)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizes.id'))
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'   
     
     id = db.Column(db.Integer, primary_key=True) 
