@@ -1,5 +1,5 @@
 from . import auth
-from flask import request
+from flask import request, session, redirect, url_for
 from ..models import User
 from app.models import db
 from flask_login import login_user, logout_user, login_required
@@ -27,9 +27,9 @@ def login():
         anon = request.get_json()
         user = User.query.filter_by(email=anon['email']).first()
         if user is not None and user.verify_password(anon['password']):
-            print(user.email)
+            session['role'] = user.role
             login_user(user)
-            return '{} is logged in'.format(user.fname)
+            return redirect(url_for('main.index'))
         return 'Wrong username  or password'
 
 # Log out active users
