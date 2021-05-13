@@ -10,21 +10,14 @@ from .. import main
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    # if request.method == 'POST':
     if form.validate_on_submit():
         try:
             user = User()
             
-            # user.fname = request.form['fname']
             user.fname = form.fname.data
-            # user.lname = request.form['lname']
             user.lname = form.lname.data
-            
-            # user.email = request.form['email']
             user.email = form.email.data
-            # user.password = request.form['password']
             user.password = form.password.data
-            # user.role = request.form['role']
             user.role = form.role.data
             
             db.session.add(user)

@@ -1,8 +1,14 @@
+
+''' 
+    Defines routes and view functions for the routes for
+    the primary functionality of the application.
+'''
+
 from flask import request, redirect, url_for, session, render_template
 from ..models import Quiz, Questions
 from .. import db
 from . import main
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required       # flask-login is used to manage the user model
 from ..auth.forms import RegisterForm
 from ..auth.forms import LoginForm
 
@@ -17,7 +23,7 @@ def loginpage():
     return render_template('login.html', form=form)
     
 
-# Examiner routes
+# Examiner routes, can only be accessed by logged in user
 @main.route('/addnewquiz', methods=['GET', 'POST'])
 @login_required
 def addnewquiz():
@@ -32,6 +38,7 @@ def addnewquiz():
         return 'Successful'
     return 'Problem'
 
+# examiner route, can only be accessed by logged in user
 @main.route('/addquizquestions', methods=['GET', 'POST'])
 @login_required
 def addquestions():

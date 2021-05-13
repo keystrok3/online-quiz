@@ -1,9 +1,11 @@
-from app import create_app, db
+from app import create_app, db  # import the application instance the app package constructor as well the db object
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_login import UserMixin
 from . import login_manager
 
+
+''' Quiz, Questions, User, and Attempted Quizzes represent entities in the database '''
 class Quiz(db.Model):
     __tablename__ = 'quizes'
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +33,7 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(64), db.CheckConstraint("role == 'student' or role == 'examiner'"))
     password_hash = db.Column(db.String(128))
     
+    # Defines a new property for User()
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')

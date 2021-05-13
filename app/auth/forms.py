@@ -1,7 +1,11 @@
+
+''' Here are classes the define the components of the authentication forms '''
+
+
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, SelectField, SubmitField
 from wtforms.validators import Required, Email, EqualTo
-from ..models import User
+from ..models import User   # User class is imported from the model 
 
 class RegisterForm(Form):
     fname = StringField('First Name', validators=[Required()])
