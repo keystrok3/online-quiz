@@ -24,8 +24,8 @@ class Questions(db.Model):
 class User(UserMixin, db.Model):
     __tablename__ = 'users'   
     
-    id = db.Column(db.Integer, primary_key=True) 
-    email = db.Column(db.String(64), primary_key=True, unique=True, nullable=False)
+    id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True) 
+    email = db.Column(db.String(64),  unique=True, nullable=False)
     fname = db.Column(db.String(64), nullable=False)
     lname = db.Column(db.String(64), nullable=False)
     role = db.Column(db.String(64), db.CheckConstraint("role == 'student' or role == 'examiner'"))
