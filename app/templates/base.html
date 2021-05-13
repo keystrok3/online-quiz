@@ -1,0 +1,33 @@
+<head>
+  {% block head%}
+  <title> {% block title %}{% endblock %} Quiz</title>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  {% endblock %}
+</head>
+
+<body>
+  {% block body %}
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{{ url_for('main.index') }}">Quiz</a>
+      {% block navbar %}
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            {% if current_user.is_authenticated %}
+              {{ current_user.fname }}
+              <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+            {% else %}
+            <a class="nav-link" href="{{ url_for('main.loginpage') }}">Login</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+      {% endblock %}
+    </div>
+  {% endblock %}
+</body>
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-3.5.1.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+{% endblock %}

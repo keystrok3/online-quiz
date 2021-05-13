@@ -1,15 +1,20 @@
-from flask import request, redirect, url_for, session
+from flask import request, redirect, url_for, session, render_template
 from ..models import Quiz, Questions
 from .. import db
 from . import main
 from flask_login import current_user, login_required
+from ..auth.forms import RegisterForm
+from ..auth.forms import LoginForm
 
-@main.route('/')
+@main.route('/', methods=['GET'])
 def index():
-    if current_user.is_authenticated:
-        return 'Hey {}'.format(current_user.fname)
-    else:
-        return 'Hey Stranger, {}'.format(current_user.is_authenticated)
+    form = RegisterForm()
+    return render_template('index.html', form=form)
+
+@main.route('/loginpage', methods=['GET'])
+def loginpage():
+    form = LoginForm()
+    return render_template('login.html', form=form)
     
 
 # Examiner routes
@@ -18,7 +23,7 @@ def index():
 def addnewquiz():
     if request.method == 'POST':
         qname = request.get_json()
-        if session.get('role') != 'examiner':
+        if current_user.role != 'examiner':
             return 'Unauthorized'
         newquiz = Quiz()
         newquiz.name = qname['name']
@@ -27,12 +32,12 @@ def addnewquiz():
         return 'Successful'
     return 'Problem'
 
-@main.route('/addquestions', methods=['GET', 'POST'])
+@main.route('/addquizquestions', methods=['GET', 'POST'])
 @login_required
 def addquestions():
     if request.method == 'POST':
         qn = request.get_json()
-        if session.get('role') != 'examiner':
+        if current_user.role != 'examiner':
             return 'Unauthorized'
         qstn = Questions()
         qstn.question_detail = qn['question_detail']
@@ -47,7 +52,7 @@ def addquestions():
         return 'Successful'
     return 'Problem'
 
-@main.route('/getqzqns', methods=['GET'])
+@main.route('/getquizquestions', methods=['GET'])
 @login_required
 def getqzqns():
     if request.method == 'GET':

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block head%}
+{{ super() }}
+<title>{% block title %}{% endblock %} Login</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='customcss/homepage.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ super() }}
+    <div class="container">
+        {% block navbar %}
+            {{ super() }}
+        {% endblock %}
+        <main>
+            <div class="row" style="margin-top: 3em;">
+                <div class="col"></div>
+                <div id="reg-form-column" class="col ">
+                    <div class="page-header">
+                        <h3>Login</h3>
+                    </div>
+                    {% for message in get_flashed_messages() %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ form.errors }}}
+                        </div>
+                    {% endif %}
+                    <form id="indexcss" action="{{ url_for('auth.login') }}" method="post" role="form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="emailfield" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" id="passwordfield" placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

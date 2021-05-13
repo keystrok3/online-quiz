@@ -22,34 +22,42 @@
                             {{ message }}
                         </div>
                     {% endfor %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ form.errors }}}
+                        </div>
+                    {% endif %}
                     <form id="indexcss" action="{{ url_for('auth.register') }}" method="post" role="form">
-                        {{ form.csrf }}
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col">
-                                    <input type="text" class="form-control" name="fname" placeholder="First Name">
+                                    {{ form.fname.label(for="fnamefield") }}
+                                    {{ form.fname(class_="form-control", id="fnamefield") }}
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="lname" placeholder="Last Name">
+                                    {{ form.lname.label(for="lnamefield") }}
+                                    {{ form.lname(class_="form-control", id="lnamefield") }}
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="emailfield" placeholder="Email">
+                            {{ form.email.label(for="email") }}
+                            {{ form.email(class_="form-control", id="emailfield") }}
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" name="password" id="passwordfield" placeholder="Password">
+                            {{ form.password.label(for="passwordfield") }}
+                            {{ form.password(class_="form-control", id="passwordfield") }}
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" name="password2" placeholder="Confirm Password">
+                            {{ form.password2.label(for="password2field") }}
+                            {{ form.password2(class_="form-control", id="password2field") }}
                         </div>
                         <div class="form-group">
-                            <select name="role" class="custom-select">
-                                <option value="student">Student</option>
-                                <option value="examiner">Examiner</option>
-                            </select>
+                            {{ form.role(class_="custom-select") }}
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        {{ form.submit(class_="btn btn-primary") }}
                     </form>
                 </div>
                 <div class="col"></div>
