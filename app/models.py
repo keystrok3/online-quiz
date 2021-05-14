@@ -44,9 +44,24 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class StudentSolutions(db.Model):
+    __tablename__ = 'studentsolutions'
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.Integer, db.ForeignKey('questions.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    solution = db.Column(db.String(64), nullable=False)
+
+class ExaminerSolutions(db.Model):
+    __tablename__ = 'examinersolutions'
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.Integer, db.ForeignKey('questions.id'))
+    examiner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    solution = db.Column(db.String(64), nullable=False)
     
-class AttemptedQuizes(db.Model):
-    __tablename__ = 'attemptedquizes'
+    
+class StudentQuizList(db.Model):
+    __tablename__ = 'studentquizlist'
     id = db.Column(db.Integer, primary_key=True)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizes.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
