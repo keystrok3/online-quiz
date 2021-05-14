@@ -35,7 +35,10 @@ def create_app(config_name):
     # Blueprints registered here
     from .main import main as main_blueprint
     from .auth import auth as auth_blueprint
+    from .ExaminerRoutes import examiners as examiners_blueprint
+    
     app.register_blueprint(main_blueprint)
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    app.register_blueprint(examiners_blueprint, url_prefix='/examiner')
     
     return app

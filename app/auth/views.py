@@ -37,10 +37,12 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user is not None and user.verify_password(password):
             login_user(user)
-            return redirect(url_for('main.index'))
+            print(user.role)
+            if user.role == 'examiner':
+                return redirect(url_for('examiners.examiner'))
         else:
             flash('Wrong email or password')
-    return render_template('auth/loginpage.html')
+    return redirect(url_for('main.loginpage'))
 
 # Log out active users
 @auth.route('/logout')

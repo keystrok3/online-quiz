@@ -8,16 +8,16 @@
 <body>
   {% block body %}
     <div class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{{ url_for('main.index') }}">Quiz</a>
+      <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
       {% block navbar %}
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
+        <ul class="navbar-nav ml-auto text-white">
+          <li class="nav-item d-flex flex-row align-items-center">
             {% if current_user.is_authenticated %}
-              {{ current_user.fname }}
-              <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+              <h3 class="mr-2">Hey, {{ current_user.fname }}</h3>
+              <button type="button" class="btn btn-secondary btn-sm"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></button>
             {% else %}
-            <a class="nav-link" href="{{ url_for('main.loginpage') }}">Login</a>
+            <button type="button" class="btn btn-secondary btn-sm"><a class="nav-link" href="{{ url_for('main.loginpage') }}">Login</a></button>
             {% endif %}
           </li>
         </ul>
