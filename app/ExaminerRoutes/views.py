@@ -1,30 +1,42 @@
-from flask import request, redirect, url_for, session, render_template
+from flask import request, redirect, url_for, session, render_template, flash
 from ..models import Quiz, Questions
 from flask_login import current_user, login_required
 from  .. import db
 from . import examiners
+from .forms import NewQuiz
 
 # Examiners Home
 @examiners.route('/examiner', methods=['GET'])
 @login_required
 def examiner():
-    return render_template('examiner/home.html')
+    quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
+    return render_template('examiner/quizlist.html', quizlist=quizlist)
+
+@examiners.route('/quizpage', methods=['GET', 'POST'])
+@login_required
+def quizpage():
+    form = NewQuiz()
+    return render_template('examiner/newquiz.html', form=form)
 
 
 # Examiner routes, can only be accessed by logged in user
 @examiners.route('/addnewquiz', methods=['GET', 'POST'])
 @login_required
 def addnewquiz():
-    if request.method == 'POST':
-        qname = request.get_json()
-        if current_user.role != 'examiner':
-            return 'Unauthorized'
+    form = NewQuiz()
+    if form.validate_on_submit():
+        quizname = form.name.data
+        
         newquiz = Quiz()
-        newquiz.name = qname['name']
+        newquiz.name = quizname
+        newquiz.examiner = current_user.id
         db.session.add(newquiz)
         db.session.commit()
-        return 'Successful'
-    return 'Problem'
+        
+        return redirect(url_for('examiners.examiner'))
+    else:
+        flash(form.errors)
+    return render_template('examiner/newquiz.html', form=form)
 
 # examiner route, can only be accessed by logged in user
 @examiners.route('/addquizquestions', methods=['GET', 'POST'])
@@ -47,11 +59,19 @@ def addquestions():
         return 'Successful'
     return 'Problem'
 
-@examiners.route('/getquizlist', methods=['GET'])
+# Get all the quizes by the logged in examiner
+# @examiners.route('/getquizlist', methods=['GET'])
+# @login_required
+# def getquizlist():
+#     quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
+#     return render_template('examiner/quizlist.html', quizlist=quizlist)
+
+
+# Get Specific Quiz
+@examiners.route('/getonequiz/<int:id>', methods=['GET'])
 @login_required
-def getquizlist():
-    if request.method == 'GET':
-        quiz = Quiz.query.all()
-        if len(quiz) == 0:
-            return 'Nothing yet'
-        return quiz
+def getonequiz(id):
+    quiz = Quiz.query.filter_by(id=id).first()
+    if quiz == None:
+        return redirect(url_for('examiners.examiner'))
+    return render_template('examiner/questions.html', quiz=quiz)
