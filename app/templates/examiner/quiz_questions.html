@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+<body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
+        {% block navbar %}
+            {{ super() }}
+        {% endblock %}
+    </div>
+
+    {% block content %}
+        {{ super() }}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                    {% for message in get_flashed_messages() %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% if form.errors %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ form.errors }}}
+                        </div>
+                    {% endif %}
+                    <div class="page-header">
+                        <h3>Add New Question</h3>
+                    </div>
+                    <form action="{{ url_for('examiners.addquestion') }}" method="post" role="form">
+                        <div class="form-group">
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question.label(for="questionnamefield") }}
+
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question(class_="form-control", id="questionnamefield") }}
+                        </div>
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>

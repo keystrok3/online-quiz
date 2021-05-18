@@ -25,13 +25,13 @@
                     <table class="table">
                         <thead>
                             <th scope="col">Quiz Name</th>
-                            <th scope="col">ID</th>
                         </thead>
                         <tbody>
                             {% for item in quizlist %}
                                 <tr>
                                     <th scope="row">{{ item.id }}</th>
                                     <td>{{ item.name }}</td>
+                                    <td>Got to Quiz</td>
                                     <td>test</td>
                                 </tr>
                             {% endfor %}

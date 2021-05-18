@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+<body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
+        {% block navbar %}
+            {{ super() }}
+        {% endblock %}
+    </div>
+
+    {% block content %}
+        {{ super() }}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore nemo quaerat incidunt quis. 
+                        At hic vitae asperiores sapiente, iure iusto aliquam molestiae? 
+                        Sapiente, est rem eligendi facere qui quisquam atque.
+                    </p>
+                </div>
+                <div class="col-2">
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore nemo quaerat incidunt quis. 
+                        At hic vitae asperiores sapiente, iure iusto aliquam molestiae? 
+                        Sapiente, est rem eligendi facere qui quisquam atque.
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>

@@ -3,7 +3,7 @@ from ..models import Quiz, Questions
 from flask_login import current_user, login_required
 from  .. import db
 from . import examiners
-from .forms import NewQuiz
+from .forms import NewQuiz, NewQuestion
 
 # Examiners Home
 @examiners.route('/examiner', methods=['GET'])
@@ -12,11 +12,13 @@ def examiner():
     quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
     return render_template('examiner/quizlist.html', quizlist=quizlist)
 
+# Serve the page with the form for adding quizes
 @examiners.route('/quizpage', methods=['GET', 'POST'])
 @login_required
 def quizpage():
     form = NewQuiz()
     return render_template('examiner/newquiz.html', form=form)
+
 
 
 # Examiner routes, can only be accessed by logged in user
@@ -38,26 +40,30 @@ def addnewquiz():
         flash(form.errors)
     return render_template('examiner/newquiz.html', form=form)
 
-# examiner route, can only be accessed by logged in user
-@examiners.route('/addquizquestions', methods=['GET', 'POST'])
+# Add new questions, with multiple-choice options and examiner's solution
+@examiners.route('/addquestion/<int:id>', methods=['GET', 'POST'])
 @login_required
-def addquestions():
-    if request.method == 'POST':
-        qn = request.get_json()
-        if current_user.role != 'examiner':
-            return 'Unauthorized'
-        qstn = Questions()
-        qstn.question_detail = qn['question_detail']
-        qstn.option_a = qn['option_a']
-        qstn.option_b = qn['option_b']
-        qstn.option_c = qn['option_c']
-        qstn.option_d = qn['option_d']
-        qstn.quiz_id = qn['quiz_id']
+def addquestion(id):
+    form = NewQuestion()
+    if form.validate_on_submit():
+                
+        newquestion.question_detail = form.question.data
         
-        db.session.add(qstn)
-        db.session.commit()
-        return 'Successful'
-    return 'Problem'
+        newquestion.option_a = form.option_a.data
+        newquestion.option_b = form.option_b.data
+        newquestion.option_c = form.option_c.data
+        newquestion.option_d = form.option_d.data
+        
+        newquestion.correct = form.correct.data
+        newquestion.quiz_id = id
+        
+        try:
+            db.session.add(newquestion)
+            db.session.commit()
+        except:
+            raise Exception("Problem adding to database")
+    flash(form.errors)
+    return render_template('examiner/quiz_questions.html', form=form)
 
 # Get all the quizes by the logged in examiner
 # @examiners.route('/getquizlist', methods=['GET'])
