@@ -12,10 +12,12 @@ from flask_login import current_user, login_required       # flask-login is used
 from ..auth.forms import RegisterForm
 from ..auth.forms import LoginForm
 
-# Renders the register (home) page
+# Renders the registration page if user is not logged in, and user's home page if logged in
 @main.route('/', methods=['GET'])
 def index():
     form = RegisterForm()
+    if current_user.is_authenticated and current_user.role == "examiner":
+        return redirect(url_for('examiners.examiner'))
     return render_template('index.html', form=form)
 
 # Renders the log in page

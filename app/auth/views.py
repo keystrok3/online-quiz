@@ -11,21 +11,24 @@ from .. import main
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        user = User()
+        
+        user.fname = form.fname.data
+        user.lname = form.lname.data
+        user.email = form.email.data
+        user.password = form.password.data
+        user.role = form.role.data
         try:
-            user = User()
-            
-            user.fname = form.fname.data
-            user.lname = form.lname.data
-            user.email = form.email.data
-            user.password = form.password.data
-            user.role = form.role.data
-            
             db.session.add(user)
             db.session.commit()
+            return redirect(url_for('main.loginpage'))
         except:
-            flash('An Error Occurred')
-            return render_template('index.html', form=form)
-        return redirect(url_for('main.loginpage'))
+            flash("Database Error")
+        return render_template('index.html', form=form)
+    else:
+        flash(form.errors)
+        return render_template('index.html', form=form)
+    return redirect(url_for('main.index'), form=form)
 
 # Log In registered users
 @auth.route('/login', methods=['GET', 'POST'])
