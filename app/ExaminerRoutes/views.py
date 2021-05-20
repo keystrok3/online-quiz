@@ -66,18 +66,20 @@ def addquestion(id):
     return render_template('examiner/quiz_questions.html', form=form)
 
 # Get all the quizes by the logged in examiner
-# @examiners.route('/getquizlist', methods=['GET'])
-# @login_required
-# def getquizlist():
-#     quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
-#     return render_template('examiner/quizlist.html', quizlist=quizlist)
+@examiners.route('/getquizlist', methods=['GET'])
+@login_required
+def getquizlist():
+    quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
+    return render_template('examiner/quizlist.html', quizlist=quizlist)
 
 
 # Get Specific Quiz
 @examiners.route('/getonequiz/<int:id>', methods=['GET'])
 @login_required
 def getonequiz(id):
+    form = NewQuestion()
     quiz = Quiz.query.filter_by(id=id).first()
+    quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
     if quiz == None:
         return redirect(url_for('examiners.examiner'))
-    return render_template('examiner/questions.html', quiz=quiz)
+    return render_template('examiner/quiz_questions.html', quiz=quiz, quizlist=quizlist, form=form)

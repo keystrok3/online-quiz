@@ -30,9 +30,7 @@
                             {% for item in quizlist %}
                                 <tr>
                                     <th scope="row">{{ item.id }}</th>
-                                    <td>{{ item.name }}</td>
-                                    <td>Got to Quiz</td>
-                                    <td>test</td>
+                                    <td><a href="{{ url_for('examiners.getonequiz', id=item.id) }}">{{ item.name }}</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>

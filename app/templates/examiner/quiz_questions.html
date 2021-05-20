@@ -11,8 +11,31 @@
     {% block content %}
         {{ super() }}
         <div class="container">
+            <div class="row mt-3">
+                <h2>Quiz: {{ quiz.name }}</h2>
+            </div>
+
+            <hr>
+
             <div class="row">
                 <div class="col">
+                    <div class="page-header">
+                        <h3>Quizes</h3>
+                    </div>
+
+                    <div class="list-group">
+                        {% for quizone in quizlist: %}
+                            <a href="{{ url_for('examiners.getonequiz', id=quizone.id) }}" 
+                                    class="list-group-item list-group-item-action">
+                                
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1"> Quiz {{ quizone.id }}</h5>
+                                    <small>3 days ago</small>
+                                </div>
+                                <p class="mb-1">{{ quizone.name }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="col">
                     {% for message in get_flashed_messages() %}
@@ -28,28 +51,40 @@
                     <div class="page-header">
                         <h3>Add New Question</h3>
                     </div>
-                    <form action="{{ url_for('examiners.addquestion') }}" method="post" role="form">
-                        <div class="form-group">
+                    <form action="{{ url_for('examiners.addquestion', id=quiz.id) }}" method="post" role="form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group mt-2">
                             {{ form.question.label(for="questionnamefield") }}
-                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question( class_="form-control", id="questionnamefield") }}
+                        </div>
 
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                {{ form.option_a.label(for="optionafield") }}
+                                {{ form.option_a(class_="form-control", id="optionafield") }}
+                            </div>
+    
+                            <div class="col">
+                                {{ form.option_b.label(for="optionbfield") }}
+                                {{ form.option_b(class_="form-control", id="optionbfield") }}
+                            </div>
+                        </div>
 
-                            {{ form.question.label(for="questionnamefield") }}
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                {{ form.option_c.label(for="optioncfield") }}
+                                {{ form.option_c(class_="form-control", id="optioncfield") }}
+                            </div>
+                            
+                            <div class="col">
+                                {{ form.option_d.label(for="optiondfield") }}
+                                {{ form.option_d(class_="form-control", id="optiondfield") }}
+                            </div>
+                        </div>
 
-                            {{ form.question.label(for="questionnamefield") }}
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
-
-                            {{ form.question.label(for="questionnamefield") }}
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
-
-                            {{ form.question.label(for="questionnamefield") }}
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
-
-                            {{ form.question.label(for="questionnamefield") }}
-                            {{ form.question(class_="form-control", id="questionnamefield") }}
+                        <div class="form-group mt-2">
+                            {{ form.correct.label(for="correctfield") }}
+                            {{ form.correct(class_="form-control", id="correctfield") }}
                         </div>
                         {{ form.submit(class_="btn btn-primary") }}
                     </form>
