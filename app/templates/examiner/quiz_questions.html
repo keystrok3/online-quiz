@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        #list-action:hover {
+            background-color: #007bff;
+            border-color: hsl(211, 100%, 50%);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #edit-column {
+            display: none;
+        }
+
+
+
+    </style>
+{% endblock %}
+<body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
+        {% block navbar %}
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('examiners.quizpage') }}" class="nav-link">Add New Quiz</a>
+                </li>
+            </ul>
+            {{ super() }}
+        {% endblock %}
+    </div>
+
+    {% block content %}
+        {{ super() }}
+        <div class="container">
+            <div class="row mt-3">
+                <h2>Quiz: {{ quiz.name }}</h2>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col">
+                    <div class="page-header"><h3>Questions</h3></div>
+                    <div class="list-group">
+                        {% for question in questions %}
+                            <a href="{{ url_for('examiners.getquestion', id=question.id) }}" class="list-group-item list-group-item-action" id="list-action">
+                                <div class="d-flex flex-column w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ question.question_detail }}</h5>
+                                    <br>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col question-form">
+                    {% for message in get_flashed_messages() %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% if form.errors %}
+                        <div class="alert alert-warning show fade" role="alert">
+                            {{ form.errors }}}
+                        </div>
+                    {% endif %}
+                    <div class="page-header">
+                        <h3>Add New Question</h3>
+                    </div>
+                    <form action="{{ url_for('examiners.addquestion', id=quiz.id) }}" method="post" role="form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group mt-2">
+                            {{ form.question.label(for="questionnamefield") }}
+                            {{ form.question( class_="form-control", id="questionnamefield") }}
+                        </div>
+
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                {{ form.option_a.label(for="optionafield") }}
+                                {{ form.option_a(class_="form-control", id="optionafield") }}
+                            </div>
+    
+                            <div class="col">
+                                {{ form.option_b.label(for="optionbfield") }}
+                                {{ form.option_b(class_="form-control", id="optionbfield") }}
+                            </div>
+                        </div>
+
+                        <div class="form-row mt-2">
+                            <div class="col">
+                                {{ form.option_c.label(for="optioncfield") }}
+                                {{ form.option_c(class_="form-control", id="optioncfield") }}
+                            </div>
+                            
+                            <div class="col">
+                                {{ form.option_d.label(for="optiondfield") }}
+                                {{ form.option_d(class_="form-control", id="optiondfield") }}
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-2">
+                            {{ form.correct.label(for="correctfield") }}
+                            {{ form.correct(class_="form-control", id="correctfield") }}
+                        </div>
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+
+{% block scripts %}
+<script>
+   
+</script>
+{% endblock %}

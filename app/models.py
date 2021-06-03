@@ -9,18 +9,19 @@ from . import login_manager
 class Quiz(db.Model):
     __tablename__ = 'quizes'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
+    name = db.Column(db.String(64))
     questions_list = db.relationship('Questions', backref='questions')
     examiner = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Questions(db.Model):
     __tablename__ = 'questions'
     id = db.Column(db.Integer, primary_key=True)
-    question_detail = db.Column(db.String(128), index=True)
-    option_a = db.Column(db.String(128), index=True)
-    option_b = db.Column(db.String(128), index=True)
-    option_c = db.Column(db.String(128), index=True)
-    option_d = db.Column(db.String(128), index=True)
+    question_detail = db.Column(db.String(128))
+    option_a = db.Column(db.String(128))
+    option_b = db.Column(db.String(128))
+    option_c = db.Column(db.String(128))
+    option_d = db.Column(db.String(128))
+    correct = db.Column(db.Integer)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizes.id'))
 
 class User(UserMixin, db.Model):
@@ -45,28 +46,29 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class StudentSolutions(db.Model):
+# All the students' solutions
+class StudentSolution(db.Model):
     __tablename__ = 'studentsolutions'
     id = db.Column(db.Integer, primary_key=True)
+    quizname = db.Column(db.Integer, db.ForeignKey('quizes.id'))
     question = db.Column(db.Integer, db.ForeignKey('questions.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    solution = db.Column(db.String(64), nullable=False)
-
-class ExaminerSolutions(db.Model):
-    __tablename__ = 'examinersolutions'
-    id = db.Column(db.Integer, primary_key=True)
-    question = db.Column(db.Integer, db.ForeignKey('questions.id'))
-    examiner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    solution = db.Column(db.String(64), nullable=False)
+    student_solution = db.Column(db.String(64), nullable=False)    
     
-    
+# List of students and quizes they've registered for
 class StudentQuizList(db.Model):
     __tablename__ = 'studentquizlist'
     id = db.Column(db.Integer, primary_key=True)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizes.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'))    
+
+# Students' scores in quizes
+class Score(db.Model):
+    __tablename__ = 'scores'
+    id = db.Column(db.Integer, primary_key=True)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizes.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    student_score = db.Column(db.Integer)
-    
+    score = db.Column(db.Integer)
 
 ''' Loads a user from the session '''
 @login_manager.user_loader

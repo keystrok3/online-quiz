@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        #list-action:hover {
+            background-color: #007bff;
+            border-color: hsl(211, 100%, 50%);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #edit-column {
+            display: none;
+        }
+
+
+
+    </style>
+{% endblock %}
+<body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
+        {% block navbar %}
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('examiners.quizpage') }}" class="nav-link">Add New Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('examiners.getonequiz', id=quiz.id) }}" class="nav-link">Questions</a>
+                </li>
+            </ul>
+            {{ super() }}
+        {% endblock %}
+    </div>
+
+    {% block content %}
+        {{ super() }}
+        <div class="container">
+            <div class="row mt-3">
+                <h2>Quiz: {{ quiz.name }}</h2>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card border-dark mb-3" style="max-width: 18rem;">
+                        <div class="card-header">{{ question.question_detail }}</div>
+                        <div class="card-body text-dark">
+                            <ul class="list-group list-group-flush">
+                                <li class="card-text list-group-item">A: {{ question.option_a }}</li>
+                                <li class="card-text list-group-item">B: {{ question.option_b }}</li>
+                                <li class="card-text list-group-item">C: {{ question.option_c }}</li>
+                                <li class="card-text list-group-item">D: {{ question.option_d }}</li>
+                                <li class="card-text list-group-item">Correct: {{ question.correct }}</li>
+                              </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+
+{% block scripts %}
+<script>
+   
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+<body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
+        {% block navbar %}
+            <a href="{{ url_for('examiners.examiner') }}"></a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('examiners.examiner') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('examiners.quizpage') }}" class="nav-link">Add New Quiz</a>
+                </li>
+            </ul>
+            {{ super() }}
+        {% endblock %}
+    </div>
+
+    {% block content %}
+        {{ super() }}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <table class="table">
+                        <br>
+                        <br>
+                        {% if not quizlist %}
+                            <h2>Add Quiz(es)</h2>
+                        {% else %}
+                            <thead>
+                                <th scope="col">Quiz Name</th>
+                            </thead>
+                            <tbody>
+                                {% for item in quizlist %}
+                                    <tr>
+                                        <td><a href="{{ url_for('examiners.getonequiz', id=item.id) }}">{{ item.name }}</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</body>
