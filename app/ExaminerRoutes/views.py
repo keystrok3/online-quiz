@@ -5,7 +5,8 @@ from  .. import db
 from . import examiners
 from .forms import NewQuiz, NewQuestion
 
-# Examiners Home
+# Examiners Home - Renders list of quizes
+# by current logged in examiner
 @examiners.route('/examiner', methods=['GET'])
 @login_required
 def examiner():
@@ -40,13 +41,15 @@ def addnewquiz():
         flash(form.errors)
     return render_template('examiner/newquiz.html', form=form)
 
+
 # Add new questions, with multiple-choice options and examiner's solution
 @examiners.route('/addquestion/<int:id>', methods=['GET', 'POST'])
 @login_required
 def addquestion(id):
     form = NewQuestion()
     if form.validate_on_submit():
-                
+        
+        newquestion = Questions()
         newquestion.question_detail = form.question.data
         
         newquestion.option_a = form.option_a.data
@@ -57,13 +60,12 @@ def addquestion(id):
         newquestion.correct = form.correct.data
         newquestion.quiz_id = id
         
-        try:
-            db.session.add(newquestion)
-            db.session.commit()
-        except:
-            raise Exception("Problem adding to database")
-    flash(form.errors)
-    return render_template('examiner/quiz_questions.html', form=form)
+        db.session.add(newquestion)
+        db.session.commit()
+        
+    if form.errors: 
+        flash(form.errors)
+    return redirect(url_for('examiners.getonequiz', id=newquestion.quiz_id))
 
 # Get all the quizes by the logged in examiner
 @examiners.route('/getquizlist', methods=['GET'])
@@ -73,13 +75,30 @@ def getquizlist():
     return render_template('examiner/quizlist.html', quizlist=quizlist)
 
 
-# Get Specific Quiz
+# Get Specific Quiz details, including ability to add, edit, or remove questions
 @examiners.route('/getonequiz/<int:id>', methods=['GET'])
 @login_required
 def getonequiz(id):
     form = NewQuestion()
     quiz = Quiz.query.filter_by(id=id).first()
     quizlist = Quiz.query.filter_by(examiner=current_user.id).all()
+    questions = Questions.query.filter_by(quiz_id=quiz.id)
     if quiz == None:
         return redirect(url_for('examiners.examiner'))
-    return render_template('examiner/quiz_questions.html', quiz=quiz, quizlist=quizlist, form=form)
+    return render_template('examiner/quiz_questions.html', quiz=quiz, questions=questions, quizlist=quizlist, form=form)
+
+# Get one specific question
+@examiners.route('/getquestion/<int:id>')
+@login_required
+def getquestion(id):
+    form = NewQuestion()
+    try:
+        question = Questions.query.filter_by(id=id).first()
+        quiz = Quiz.query.filter_by(id=question.quiz_id).first()
+        return render_template('examiner/quiz_question.html', quiz=quiz, question=question, form=form)
+    except Exception as e:
+        print(e)
+        return redirect(url_for('examiners.getonequiz', id=question.quiz_id))
+
+
+    

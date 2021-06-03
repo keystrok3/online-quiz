@@ -23,17 +23,22 @@
             <div class="row">
                 <div class="col">
                     <table class="table">
-                        <thead>
-                            <th scope="col">Quiz Name</th>
-                        </thead>
-                        <tbody>
-                            {% for item in quizlist %}
-                                <tr>
-                                    <th scope="row">{{ item.id }}</th>
-                                    <td><a href="{{ url_for('examiners.getonequiz', id=item.id) }}">{{ item.name }}</a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
+                        <br>
+                        <br>
+                        {% if not quizlist %}
+                            <h2>Add Quiz(es)</h2>
+                        {% else %}
+                            <thead>
+                                <th scope="col">Quiz Name</th>
+                            </thead>
+                            <tbody>
+                                {% for item in quizlist %}
+                                    <tr>
+                                        <td><a href="{{ url_for('examiners.getonequiz', id=item.id) }}">{{ item.name }}</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% endif %}
                     </table>
                 </div>
             </div>

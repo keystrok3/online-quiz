@@ -10,6 +10,11 @@
     <div class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{{ url_for('main.index') }}"><h2>Quiz</h2></a>
         {% block navbar %}
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('main.index') }}" class="nav-link">Home</a>
+                </li>
+            </ul>
             {{ super() }}
         {% endblock %}
     </div>
